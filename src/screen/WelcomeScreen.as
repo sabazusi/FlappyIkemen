@@ -1,7 +1,7 @@
 /*
  * @Auther sabazusi
  */
-package sceans
+package screen
 {
     import feathers.controls.Screen;
 

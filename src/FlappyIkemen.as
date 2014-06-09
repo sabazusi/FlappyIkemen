@@ -5,7 +5,6 @@ package {
     import flash.display.Sprite;
 
     import starling.core.Starling;
-    import starling.utils.AssetManager;
 
     [SWF(frameRate="60", width="640", height="360")]
 

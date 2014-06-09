@@ -3,7 +3,11 @@
  */
 package
 {
-    import sceans.SceenInitializer;
+    import events.ScreenInitializeEvent;
+
+    import feathers.motion.transitions.ScreenSlidingStackTransitionManager;
+
+    import screen.ScreenInitializer;
 
     import starling.display.Sprite;
     import starling.events.Event;
@@ -12,11 +16,12 @@ package
     public class GameController extends Sprite
     {
         private var _assetManager:AssetManager = new AssetManager();
-        private var _sceenInitializer:SceenInitializer = new SceenInitializer();
+        private var _sceenInitializer:ScreenInitializer = new ScreenInitializer();
 
         public function GameController()
         {
             this.addEventListener(Event.ADDED_TO_STAGE, _onAddedToStage);
+            _sceenInitializer.addEventListener(ScreenInitializeEvent.INITIALIZE_COMPLETE, _onScreenInitializeComplete)
         }
 
         private function _onAddedToStage(event:Event):void
@@ -37,6 +42,12 @@ package
             {
                 _sceenInitializer.initialize(_assetManager);
             }
+        }
+
+        private function _onScreenInitializeComplete(event:ScreenInitializeEvent):void
+        {
+            var transitionManager:ScreenSlidingStackTransitionManager = new ScreenSlidingStackTransitionManager(event.navigator);
+            trace("a")
         }
     }
 }
