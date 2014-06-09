@@ -1,12 +1,20 @@
+/*
+ * @Auther sabazusi
+ */
 package {
     import flash.display.Sprite;
-    import flash.text.TextField;
+
+    import starling.core.Starling;
+    import starling.utils.AssetManager;
+
+    [SWF(frameRate="60", width="640", height="360")]
 
     public class FlappyIkemen extends Sprite {
+
         public function FlappyIkemen() {
-            var textField:TextField = new TextField();
-            textField.text = "Hello, World";
-            addChild(textField);
+            var starling:Starling = new Starling(GameController, stage);
+            starling.start();
         }
+
     }
 }

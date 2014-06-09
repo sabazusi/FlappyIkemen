@@ -1,8 +1,6 @@
-/**
- *
+/*
  * @Auther sabazusi
  */
-
 package sceans
 {
     import feathers.controls.Screen;
