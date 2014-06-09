@@ -5,6 +5,8 @@ package
 {
     import events.ScreenInitializeEvent;
 
+    import feathers.controls.ScreenNavigator;
+
     import feathers.motion.transitions.ScreenSlidingStackTransitionManager;
 
     import screen.ScreenInitializer;
@@ -46,8 +48,11 @@ package
 
         private function _onScreenInitializeComplete(event:ScreenInitializeEvent):void
         {
-            var transitionManager:ScreenSlidingStackTransitionManager = new ScreenSlidingStackTransitionManager(event.navigator);
-            trace("a")
+            var navigator:ScreenNavigator = event.navigator;
+            var transitionManager:ScreenSlidingStackTransitionManager = new ScreenSlidingStackTransitionManager(navigator);
+            transitionManager.duration = 0.4;
+
+            navigator.showScreen("welcome");
         }
     }
 }
