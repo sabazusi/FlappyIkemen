@@ -11,6 +11,10 @@ package screen
 
     import org.osflash.signals.Signal;
 
+    import starling.animation.Transitions;
+
+    import starling.core.Starling;
+
     import starling.display.Image;
 
     import starling.textures.Texture;
@@ -35,13 +39,20 @@ package screen
         override protected function initialize():void
         {
             trace("initialized");
+            var tex:Texture = assets.getTexture("IKEMEN");
+            var img:Image = new Image(tex);
+            img.x = img.width * -1 - 100;
+            this.addChild(img);
+
+            Starling.juggler.tween(img, 0.5, {
+                transition: Transitions.EASE_IN,
+                x: 640-img.width
+            })
         }
 
         override protected function draw():void
         {
             trace("draw");
-            var tex:Texture = assets.getTexture("IKEMEN");
-            this.addChild(new Image(tex));
         }
 
         public function get assets():AssetManager
