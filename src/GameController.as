@@ -9,6 +9,8 @@ package
 
     import feathers.motion.transitions.ScreenSlidingStackTransitionManager;
 
+    import screen.ScreenIdList;
+
     import screen.ScreenInitializer;
 
     import starling.display.Sprite;
@@ -52,7 +54,8 @@ package
             var transitionManager:ScreenSlidingStackTransitionManager = new ScreenSlidingStackTransitionManager(navigator);
             transitionManager.duration = 0.4;
 
-            navigator.showScreen("welcome");
+            this.addChild(navigator);
+            navigator.showScreen(ScreenIdList.WELCOME);
         }
     }
 }
