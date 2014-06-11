@@ -28,12 +28,12 @@ package screen
 
         override protected function initialize():void
         {
-            trace("initialized");
+            trace("initialized game");
         }
 
         override protected function draw():void
         {
-            trace("draw");
+            trace("draw game");
         }
 
         public function get assets():AssetManager

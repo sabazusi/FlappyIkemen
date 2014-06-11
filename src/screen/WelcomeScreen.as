@@ -3,8 +3,6 @@
  */
 package screen
 {
-    import feathers.controls.Button;
-    import feathers.controls.Label;
     import feathers.controls.Screen;
 
     import org.osflash.signals.ISignal;
@@ -14,7 +12,7 @@ package screen
     import starling.animation.Transitions;
 
     import starling.core.Starling;
-
+    import starling.display.Button;
     import starling.display.Image;
 
     import starling.textures.Texture;
@@ -43,6 +41,12 @@ package screen
             var img:Image = new Image(tex);
             img.x = img.width * -1 - 100;
             this.addChild(img);
+
+            var btTex:Texture = assets.getTexture("BUTTON_UP");
+            var btn:Button = new Button(btTex, "start game");
+            btn.x = (640 - btn.width) / 2;
+            btn.y = (400 - btn.height) - 50;
+            this.addChild(btn);
 
             Starling.juggler.tween(img, 0.5, {
                 transition: Transitions.EASE_IN,
