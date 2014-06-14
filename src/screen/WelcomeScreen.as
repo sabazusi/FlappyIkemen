@@ -3,22 +3,18 @@
  */
 package screen
 {
+    import feathers.controls.Button;
     import feathers.controls.Screen;
-
     import org.osflash.signals.ISignal;
-
     import org.osflash.signals.Signal;
 
     import starling.animation.Transitions;
 
     import starling.core.Starling;
-    import starling.display.Button;
+
     import starling.display.Image;
-
-    import starling.textures.Texture;
-
+    import starling.events.Event;
     import starling.utils.AssetManager;
-
     public class WelcomeScreen extends Screen
     {
         private var _asset:AssetManager;
@@ -27,7 +23,7 @@ package screen
 
         public function get onNext():ISignal
         {
-            return _onNext;
+            return this._onNext;
         }
 
         public function WelcomeScreen()
@@ -37,16 +33,18 @@ package screen
         override protected function initialize():void
         {
             trace("initialized");
-            var tex:Texture = assets.getTexture("IKEMEN");
-            var img:Image = new Image(tex);
+            var button:Button = new Button();
+            var btTex:Image = new Image(assets.getTexture("BUTTON_UP"));
+            button.label = "click to game start.";
+            button.defaultSkin = btTex;
+            button.addEventListener(Event.TRIGGERED, function(event:Event):void
+            {
+                dispatchEventWith(Event.COMPLETE);
+            })
+            this.addChild(button);
+            var img:Image = new Image(assets.getTexture("IKEMEN"));
             img.x = img.width * -1 - 100;
             this.addChild(img);
-
-            var btTex:Texture = assets.getTexture("BUTTON_UP");
-            var btn:Button = new Button(btTex, "start game");
-            btn.x = (640 - btn.width) / 2;
-            btn.y = (400 - btn.height) - 50;
-            this.addChild(btn);
 
             Starling.juggler.tween(img, 0.5, {
                 transition: Transitions.EASE_IN,

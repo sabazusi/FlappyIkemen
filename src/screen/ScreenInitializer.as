@@ -23,18 +23,20 @@ package screen
 
         public function initialize(assetManager:AssetManager):void
         {
-            _screenNavigator.addScreen(ScreenIdList.WELCOME,  new ScreenNavigatorItem(WelcomeScreen,
+            _screenNavigator.addScreen(ScreenIdList.GAME,  new ScreenNavigatorItem(GameScreen,
                     {
-                        onNext: ScreenIdList.GAME
+                        //onBack: ScreenIdList.WELCOME
+                        complete: ScreenIdList.WELCOME
                     },
                     {
                         assets: assetManager
                     }
             ));
 
-            _screenNavigator.addScreen(ScreenIdList.GAME,  new ScreenNavigatorItem(GameScreen,
+            _screenNavigator.addScreen(ScreenIdList.WELCOME,  new ScreenNavigatorItem(WelcomeScreen,
                     {
-                        onBack: ScreenIdList.WELCOME
+                        //onNext: ScreenIdList.GAME
+                        complete: ScreenIdList.GAME
                     },
                     {
                         assets: assetManager
