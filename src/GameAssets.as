@@ -10,5 +10,11 @@ package
 
         [Embed(source="../assets/BUTTON_UP.jpg")]
         public static const BUTTON_UP:Class;
+
+        [Embed(source="../assets/BT_UP.gif")]
+        public static const BT_UP:Class;
+
+        [Embed(source="../assets/BT_DOWN.gif")]
+        public static const BT_DOWN:Class;
     }
 }
