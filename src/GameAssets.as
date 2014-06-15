@@ -16,5 +16,8 @@ package
 
         [Embed(source="../assets/BT_DOWN.gif")]
         public static const BT_DOWN:Class;
+
+        [Embed(source="../assets/MAP.png")]
+        public static const MAP:Class;
     }
 }

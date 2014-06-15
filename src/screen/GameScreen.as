@@ -21,6 +21,8 @@ package screen
 
         private var _onBack:Signal = new Signal(GameScreen);
 
+        private var _deviceWidth:Number;
+
         public function get onBack():ISignal
         {
             return _onBack;
@@ -33,15 +35,14 @@ package screen
         override protected function initialize():void
         {
             trace("initialized game");
-            var button:Button = new Button();
-            var btTex:Image = new Image(assets.getTexture("BUTTON_UP"));
-            button.label = "click to game start.";
-            button.defaultSkin = btTex;
-            button.addEventListener(Event.TRIGGERED, function(event:Event):void
-            {
-                dispatchEventWith(Event.COMPLETE);
-            })
-            this.addChild(button);
+            var mapImage:Image = new Image(assets.getTexture("MAP"));
+            var mapImage2:Image = new Image(assets.getTexture("MAP"));
+            mapImage.x = 0;
+            mapImage2.x = mapImage.width;
+            _deviceWidth = this.stage.width;
+            this.addChild(mapImage);
+            this.addChild(mapImage2);
+            this.addEventListener(Event.ENTER_FRAME, _onEnterFrame)
         }
 
         override protected function draw():void
@@ -57,6 +58,16 @@ package screen
         public function set assets(value:AssetManager):void
         {
             _asset = value;
+        }
+
+        private function _onEnterFrame(event:Event):void
+        {
+            // scroll background.
+            this.x -= 2;
+            if (this.x * -1 > stage.width)
+            {
+                this.x = 0;
+            }
         }
     }
 }
