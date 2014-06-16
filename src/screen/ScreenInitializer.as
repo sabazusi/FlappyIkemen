@@ -25,7 +25,6 @@ package screen
         {
             _screenNavigator.addScreen(ScreenIdList.GAME,  new ScreenNavigatorItem(GameScreen,
                     {
-                        //onBack: ScreenIdList.WELCOME
                         complete: ScreenIdList.WELCOME
                     },
                     {
@@ -35,7 +34,6 @@ package screen
 
             _screenNavigator.addScreen(ScreenIdList.WELCOME,  new ScreenNavigatorItem(WelcomeScreen,
                     {
-                        //onNext: ScreenIdList.GAME
                         complete: ScreenIdList.GAME
                     },
                     {

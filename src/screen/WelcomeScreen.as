@@ -11,9 +11,6 @@ package screen
     import flash.geom.Rectangle;
 
 
-    import org.osflash.signals.ISignal;
-    import org.osflash.signals.Signal;
-
     import starling.animation.Transitions;
 
     import starling.core.Starling;
@@ -25,13 +22,6 @@ package screen
     public class WelcomeScreen extends Screen
     {
         private var _asset:AssetManager;
-
-        private var _onNext:Signal = new Signal(WelcomeScreen);
-
-        public function get onNext():ISignal
-        {
-            return this._onNext;
-        }
 
         public function WelcomeScreen()
         {
