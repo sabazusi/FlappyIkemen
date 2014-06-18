@@ -15,7 +15,6 @@ package game
 
         private var _position:Number;
 
-        private var _maintainCount:int = 300;
         public function GravityManager(startPosition:Number)
         {
             _position = startPosition;
@@ -23,10 +22,6 @@ package game
 
         public function getNextPos(currentPos:Number):Number
         {
-            if (_maintainCount > 0){
-                _maintainCount--;
-                return _position;
-            }
             var newPos:Number = _position + (G_FORCE + _velocity) / 2;
             _velocity += G_FORCE;
             _position = newPos;

@@ -31,6 +31,8 @@ package screen
 
         private var _gravityManager:GravityManager;
 
+        private var _maintainCount:Number = 300;
+
         public function GameScreen()
         {
         }
@@ -83,7 +85,18 @@ package screen
                 this.x = 0;
             }
             _ikemen.x = this.x * -1 + 40;
-            _ikemen.y = _gravityManager.getNextPos(_ikemen.y);
+
+            if(_maintainCount > 0)
+            {
+                _ikemen.visible = (_maintainCount % 10 == 0) ?
+                                    false : true;
+                _maintainCount--;
+            }
+            else
+            {
+                _ikemen.visible = true;
+                _ikemen.y = _gravityManager.getNextPos(_ikemen.y);
+            }
         }
 
         private function _onTouch(event:TouchEvent):void
