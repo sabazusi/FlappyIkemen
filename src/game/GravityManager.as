@@ -20,6 +20,10 @@ package game
             _position = startPosition;
         }
 
+        public function hop():void
+        {
+        }
+
         public function getNextPos(currentPos:Number):Number
         {
             var newPos:Number = _position + (G_FORCE + _velocity) / 2;

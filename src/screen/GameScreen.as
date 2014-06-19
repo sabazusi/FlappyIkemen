@@ -7,9 +7,6 @@ package screen
 
     import game.GravityManager;
 
-    import raix.reactive.IObservable;
-    import raix.reactive.Observable;
-
     import starling.display.Image;
     import starling.events.Event;
     import starling.events.Touch;
@@ -20,6 +17,8 @@ package screen
 
     public class GameScreen extends Screen
     {
+        private static const GROUND_HEIGHT:Number = 45;
+
         private var _asset:AssetManager;
 
         private var _backGroundFront:Image;
@@ -28,10 +27,12 @@ package screen
         private var _deviceWidth:Number;
 
         private var _ikemen:Image;
+        private var _underPositionLimit:Number;
 
         private var _gravityManager:GravityManager;
 
         private var _maintainCount:Number = 300;
+        private var _gameEnabled:Boolean = false;
 
         public function GameScreen()
         {
@@ -50,6 +51,7 @@ package screen
             _ikemen.y = 50;
             _backGroundFront.x = 0;
             _backGroundBack.x = _backGroundFront.width;
+            _underPositionLimit =_backGroundFront.height - GROUND_HEIGHT - _ikemen.height;
 
             _gravityManager = new GravityManager(_ikemen.y);
 
@@ -58,6 +60,8 @@ package screen
             this.addChild(_ikemen);
             this.addEventListener(Event.ENTER_FRAME, _onEnterFrame);
             this.addEventListener(TouchEvent.TOUCH,  _onTouch);
+
+            _gameEnabled = true;
         }
 
         override protected function draw():void
@@ -77,6 +81,7 @@ package screen
 
         private function _onEnterFrame(event:Event):void
         {
+            if (!_gameEnabled) return;
             // scroll background.
             this.x -= 2;
             var pos:Number = this.x * -1;
@@ -97,6 +102,12 @@ package screen
                 _ikemen.visible = true;
                 _ikemen.y = _gravityManager.getNextPos(_ikemen.y);
             }
+
+            if (_ikemen.y > _underPositionLimit)
+            {
+                trace("dead");
+                _gameEnabled = false;
+            }
         }
 
         private function _onTouch(event:TouchEvent):void
@@ -105,6 +116,7 @@ package screen
             if (touch && touch.phase == TouchPhase.BEGAN)
             {
                 trace("touched!");
+                _gravityManager.hop();
             }
         }
     }
