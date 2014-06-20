@@ -22,6 +22,7 @@ package game
 
         public function hop():void
         {
+            _velocity -= G_FORCE * 60;
         }
 
         public function getNextPos(currentPos:Number):Number

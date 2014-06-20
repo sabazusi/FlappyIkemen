@@ -116,7 +116,15 @@ package screen
             if (touch && touch.phase == TouchPhase.BEGAN)
             {
                 trace("touched!");
-                _gravityManager.hop();
+                if (_maintainCount > 0)
+                {
+                    _maintainCount = -1;
+                    _gravityManager.hop();
+                }
+                else
+                {
+                    _gravityManager.hop();
+                }
             }
         }
     }
