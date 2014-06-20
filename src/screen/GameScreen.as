@@ -32,7 +32,9 @@ package screen
         private var _gravityManager:GravityManager;
 
         private var _maintainCount:Number = 300;
+
         private var _gameEnabled:Boolean = false;
+        private var _isTouching:Boolean = false;
 
         public function GameScreen()
         {
@@ -91,6 +93,10 @@ package screen
             }
             _ikemen.x = this.x * -1 + 40;
 
+            if (_isTouching)
+            {
+                _gravityManager.hop();
+            }
             if(_maintainCount > 0)
             {
                 _ikemen.visible = (_maintainCount % 10 == 0) ?
@@ -113,17 +119,19 @@ package screen
         private function _onTouch(event:TouchEvent):void
         {
             var touch:Touch = event.getTouch(stage);
-            if (touch && touch.phase == TouchPhase.BEGAN)
+            if (touch)
             {
-                trace("touched!");
-                if (_maintainCount > 0)
+                switch(touch.phase)
                 {
-                    _maintainCount = -1;
-                    _gravityManager.hop();
-                }
-                else
-                {
-                    _gravityManager.hop();
+                    case TouchPhase.BEGAN:
+                        _isTouching = true;
+                        _maintainCount = 0;
+                        break;
+                    case TouchPhase.ENDED:
+                        _isTouching = false;
+                        break;
+                    default:
+                        break;
                 }
             }
         }
