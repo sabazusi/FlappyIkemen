@@ -5,13 +5,17 @@ package screen
 {
     import feathers.controls.Screen;
 
+    import flash.events.Event;
+
     import game.GravityManager;
+    import game.WallController;
 
     import starling.display.Image;
     import starling.events.Event;
     import starling.events.Touch;
     import starling.events.TouchEvent;
     import starling.events.TouchPhase;
+    import starling.textures.Texture;
 
     import starling.utils.AssetManager;
 
@@ -36,6 +40,8 @@ package screen
         private var _gameEnabled:Boolean = false;
         private var _isTouching:Boolean = false;
 
+        private var _wallController:WallController;
+
         public function GameScreen()
         {
         }
@@ -48,6 +54,10 @@ package screen
             _ikemen = new Image(assets.getTexture("IKEMEN"));
             _deviceWidth = this.stage.width;
 
+            var wallTex:Texture = assets.getTexture("WALL");
+            _wallController = new WallController(this, wallTex);
+            _wallController.initialize();
+
             _ikemen.scaleX = _ikemen.scaleY = 0.3;
             _ikemen.x = 40;
             _ikemen.y = 50;
@@ -57,11 +67,12 @@ package screen
 
             _gravityManager = new GravityManager(_ikemen.y);
 
-            this.addChild(_backGroundFront);
-            this.addChild(_backGroundBack);
+            this.addChildAt(_backGroundFront, 0);
+            this.addChildAt(_backGroundBack, 0);
             this.addChild(_ikemen);
-            this.addEventListener(Event.ENTER_FRAME, _onEnterFrame);
+            this.addEventListener(starling.events.Event.ENTER_FRAME, _onEnterFrame);
             this.addEventListener(TouchEvent.TOUCH,  _onTouch);
+            _wallController.addEventListener(flash.events.Event.CLOSE, _onCollision);
 
             _gameEnabled = true;
         }
@@ -81,7 +92,7 @@ package screen
             _asset = value;
         }
 
-        private function _onEnterFrame(event:Event):void
+        private function _onEnterFrame(event:starling.events.Event):void
         {
             if (!_gameEnabled) return;
             // scroll background.
@@ -114,6 +125,13 @@ package screen
                 trace("dead");
                 _gameEnabled = false;
             }
+
+            // check wall collision
+            _wallController.updateByCurrentCharacterStatus(_ikemen);
+        }
+        private function _onCollision(event:flash.events.Event):void
+        {
+            _gameEnabled = false;
         }
 
         private function _onTouch(event:TouchEvent):void

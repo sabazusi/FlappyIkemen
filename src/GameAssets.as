@@ -19,5 +19,8 @@ package
 
         [Embed(source="../assets/MAP.png")]
         public static const MAP:Class;
+
+        [Embed(source="../assets/WALL.png")]
+        public static const WALL:Class;
     }
 }

@@ -23,7 +23,7 @@ package game
         public function hop():void
         {
             if (_velocity > 0) _velocity = 0;
-            _velocity -= G_FORCE * 5;
+            _velocity -= G_FORCE * 3;
         }
 
         public function getNextPos(currentPos:Number):Number
