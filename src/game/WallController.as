@@ -96,3 +96,63 @@ package game
         }
     }
 }
+
+import flash.geom.Point;
+
+import starling.display.Image;
+import starling.textures.Texture;
+
+
+internal class SplitWall
+{
+    private static const FLYABLE_SPACE_PER_STAGE:Number = 30;
+
+    private var _upWall:Image;
+    private var _downWall:Image;
+
+    private var _stageHeight:Number;
+
+    private var _flyableSpaceHeight:Number;
+
+    public function SplitWall(wallTex:Texture, stageHeight:Number)
+    {
+        _upWall = new Image(wallTex);
+        _downWall = new Image(wallTex);
+        _stageHeight = stageHeight;
+
+        _flyableSpaceHeight = _stageHeight * FLYABLE_SPACE_PER_STAGE / 100;
+
+        _setWallStatus();
+    }
+
+    private function _setWallStatus():void
+    {
+        var flyablePoint:Point = _createFlyableHeight();
+
+        var upScale:Number = flyablePoint.x / _upWall.height;
+        var downScale:Number = (_stageHeight - flyablePoint.y) / _downWall.height;
+
+        _upWall.scaleY = upScale;
+        _upWall.y = 0;
+
+        _downWall.scaleY = downScale;
+        _downWall.y = flyablePoint.y;
+    }
+    private function _createFlyableHeight():Point
+    {
+        var maxPoint:Number = _stageHeight - (_upWall.height + _flyableSpaceHeight);
+        var minPoint:Number = 0 + _upWall.height;
+        var startPoint:Number = Math.floor(Math.random()*(maxPoint-minPoint+1))+minPoint;
+        return new Point(startPoint, startPoint + _flyableSpaceHeight);
+    }
+
+    public function get up():Image
+    {
+        return _upWall;
+    }
+
+    public function get down():Image
+    {
+        return _downWall;
+    }
+}

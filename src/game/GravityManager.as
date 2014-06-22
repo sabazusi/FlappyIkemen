@@ -1,10 +1,3 @@
-/**
- * Created with IntelliJ IDEA.
- * User: sabazusi
- * Date: 2014/06/18
- * Time: 12:35
- * To change this template use File | Settings | File Templates.
- */
 package game
 {
     public class GravityManager
