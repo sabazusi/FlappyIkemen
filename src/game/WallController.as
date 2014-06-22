@@ -81,8 +81,12 @@ package game
             var charaRect:Rectangle = character.getBounds(character);
             wallRect.x = wall.x;
             wallRect.y = wall.y;
+            wallRect.width *= wall.scaleX;
+            wallRect.height *= wall.scaleY;
             charaRect.x = character.x;
             charaRect.y = character.y;
+            charaRect.width *= character.scaleX;
+            charaRect.height *= character.scaleY;
             return wallRect.intersects(charaRect);
         }
 

@@ -51,13 +51,14 @@ package screen
             trace("initialized game");
             _backGroundFront = new Image(assets.getTexture("MAP"));
             _backGroundBack = new Image(assets.getTexture("MAP"));
-            _ikemen = new Image(assets.getTexture("IKEMEN"));
             _deviceWidth = this.stage.width;
 
             var wallTex:Texture = assets.getTexture("WALL");
             _wallController = new WallController(this, wallTex);
             _wallController.initialize();
 
+            var ikemenTex:Texture = assets.getTexture("IKEMEN")
+            _ikemen = new Image(ikemenTex);
             _ikemen.scaleX = _ikemen.scaleY = 0.3;
             _ikemen.x = 40;
             _ikemen.y = 50;
