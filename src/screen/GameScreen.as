@@ -54,7 +54,7 @@ package screen
             _deviceWidth = this.stage.width;
 
             var wallTex:Texture = assets.getTexture("WALL");
-            _wallController = new WallController(this, wallTex);
+            _wallController = new WallController(this, wallTex, GROUND_HEIGHT);
             _wallController.initialize();
 
             var ikemenTex:Texture = assets.getTexture("IKEMEN")
@@ -125,6 +125,7 @@ package screen
             {
                 trace("dead");
                 _gameEnabled = false;
+                dispatchEventWith(flash.events.Event.COMPLETE);
             }
 
             // check wall collision
@@ -133,6 +134,7 @@ package screen
         private function _onCollision(event:flash.events.Event):void
         {
             _gameEnabled = false;
+            dispatchEventWith(flash.events.Event.COMPLETE);
         }
 
         private function _onTouch(event:TouchEvent):void

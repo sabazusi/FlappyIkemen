@@ -15,48 +15,51 @@ package game
         private var _currentWallDistance = 1000;
         private var _stage:DisplayObjectContainer
         private var _wallTex:Texture;
-        private var _wallQueue:Vector.<Image> = Vector.<Image>([]);
+        private var _splitWallQueue:Vector.<SplitWall> = Vector.<SplitWall>([]);
+        private var _flyableSpaceHeight:Number;
 
-        public function WallController(stage:DisplayObjectContainer, wallTex:Texture)
+        public function WallController(stage:DisplayObjectContainer, wallTex:Texture, groundHeight:Number)
         {
             _stage = stage;
             _wallTex = wallTex;
+            _flyableSpaceHeight = stage.height - groundHeight;
         }
 
         public function initialize():void
         {
-            // create 2 wall.
-            _wallQueue = Vector.<Image>([]);
-            var wall1:Image = new Image(_wallTex);
-            wall1.x = -100;
-            wall1.y = 30;
-            var wall2:Image = new Image(_wallTex);
-            wall2.x = -100;
-            wall2.y = 30;
-            _stage.addChild(wall1);
-            _stage.addChild(wall2);
-            _wallQueue.push(wall1);
-            _wallQueue.push(wall2);
+            var wall1:SplitWall = new SplitWall(_wallTex, _flyableSpaceHeight);
+            var wall2:SplitWall = new SplitWall(_wallTex, _flyableSpaceHeight);
+            _splitWallQueue.push(wall1);
+            _splitWallQueue.push(wall2);
+            for (var i:int = 0; i < _splitWallQueue.length; i++)
+            {
+                _splitWallQueue[i].setVisibility(false);
+                _stage.addChild(_splitWallQueue[i].up);
+                _stage.addChild(_splitWallQueue[i].down);
+            }
         }
 
         public function updateByCurrentCharacterStatus(currentCharacter:Image):void
         {
             _currentWallDistance -= 3;
             var disposeLen:int = 0;
-            for(var i:int= 0; i < _wallQueue.length; i++)
+            for(var i:int= 0; i < _splitWallQueue.length; i++)
             {
                 var newDistance:Number = _currentWallDistance + (_WALL_DISTANCE * i);
                 if (newDistance < 0)
                 {
-                    _stage.removeChild(_wallQueue[i]);
+                    _splitWallQueue[i].removeFromStage(_stage);
                     disposeLen++;
                 }
                 else
                 {
-                    _wallQueue[i].x = currentCharacter.x + newDistance;
+                    _splitWallQueue[i].wallX = currentCharacter.x + newDistance;
                 }
+
+                _splitWallQueue[i].setVisibility(true);
             }
-            if (isCollision(_wallQueue[0], currentCharacter))
+            if (isCollision(_splitWallQueue[0].up, currentCharacter) ||
+                    isCollision(_splitWallQueue[0].down, currentCharacter))
             {
                 _exitGame();
             }
@@ -64,12 +67,11 @@ package game
             {
                 for(var i:int=0; i<disposeLen; i++)
                 {
-                    _wallQueue.shift();
-                    var newWall:Image = new Image(_wallTex);
-                    newWall.x = currentCharacter.x + 1000;
-                    newWall.y = 30;
-                    _wallQueue.push(newWall);
-                    _stage.addChild(newWall);
+                    _splitWallQueue.shift();
+                    var newWall:SplitWall = new SplitWall(_wallTex, _flyableSpaceHeight);
+                    newWall.setVisibility(false);
+                    _splitWallQueue.push(newWall);
+                    newWall.addToStage(_stage);
                 }
                 _currentWallDistance += _WALL_DISTANCE;
             }
@@ -98,6 +100,8 @@ package game
 }
 
 import flash.geom.Point;
+
+import starling.display.DisplayObjectContainer;
 
 import starling.display.Image;
 import starling.textures.Texture;
@@ -129,8 +133,12 @@ internal class SplitWall
     {
         var flyablePoint:Point = _createFlyableHeight();
 
+        trace("飛べる領域：", flyablePoint.x, flyablePoint.y);
         var upScale:Number = flyablePoint.x / _upWall.height;
         var downScale:Number = (_stageHeight - flyablePoint.y) / _downWall.height;
+        trace("縦に伸ばす", upScale);
+        trace("横に伸ばす", downScale);
+
 
         _upWall.scaleY = upScale;
         _upWall.y = 0;
@@ -154,5 +162,32 @@ internal class SplitWall
     public function get down():Image
     {
         return _downWall;
+    }
+
+    public function setVisibility(visible:Boolean):void
+    {
+        _upWall.visible = visible;
+        _downWall.visible = visible;
+    }
+
+    public function addToStage(stage:DisplayObjectContainer):void
+    {
+        stage.addChild(_upWall);
+        stage.addChild(_downWall);
+    }
+
+    public function removeFromStage(stage:DisplayObjectContainer):void
+    {
+        stage.removeChild(_upWall);
+        stage.removeChild(_downWall);
+    }
+
+    public function set wallX(pos:Number):void
+    {
+        _upWall.x = pos;
+        _downWall.x = pos;
+
+ //       trace("[up]", _upWall.x, _upWall.y, _upWall.height);
+  //      trace("[down]", _downWall.x, _downWall.y, _downWall.height);
     }
 }
