@@ -22,7 +22,7 @@ package game
         {
             _stage = stage;
             _wallTex = wallTex;
-            _flyableSpaceHeight = stage.height - groundHeight;
+            _flyableSpaceHeight = 360 - groundHeight;
         }
 
         public function initialize():void
@@ -109,7 +109,7 @@ import starling.textures.Texture;
 
 internal class SplitWall
 {
-    private static const FLYABLE_SPACE_PER_STAGE:Number = 30;
+    private static const FLYABLE_SPACE_PER_STAGE:Number = 50;
 
     private var _upWall:Image;
     private var _downWall:Image;
@@ -136,8 +136,8 @@ internal class SplitWall
         trace("飛べる領域：", flyablePoint.x, flyablePoint.y);
         var upScale:Number = flyablePoint.x / _upWall.height;
         var downScale:Number = (_stageHeight - flyablePoint.y) / _downWall.height;
-        trace("縦に伸ばす", upScale);
-        trace("横に伸ばす", downScale);
+  //      trace("縦に伸ばす", upScale);
+    //    trace("横に伸ばす", downScale);
 
 
         _upWall.scaleY = upScale;
@@ -151,6 +151,7 @@ internal class SplitWall
         var maxPoint:Number = _stageHeight - (_upWall.height + _flyableSpaceHeight);
         var minPoint:Number = 0 + _upWall.height;
         var startPoint:Number = Math.floor(Math.random()*(maxPoint-minPoint+1))+minPoint;
+        trace(startPoint, "から", startPoint + _flyableSpaceHeight, "まで通れる");
         return new Point(startPoint, startPoint + _flyableSpaceHeight);
     }
 
@@ -186,8 +187,5 @@ internal class SplitWall
     {
         _upWall.x = pos;
         _downWall.x = pos;
-
- //       trace("[up]", _upWall.x, _upWall.y, _upWall.height);
-  //      trace("[down]", _downWall.x, _downWall.y, _downWall.height);
     }
 }

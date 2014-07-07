@@ -123,9 +123,9 @@ package screen
 
             if (_ikemen.y > _underPositionLimit)
             {
-                trace("dead");
-                _gameEnabled = false;
-                dispatchEventWith(flash.events.Event.COMPLETE);
+                //trace("dead");
+               // _gameEnabled = false;
+              //  dispatchEventWith(flash.events.Event.COMPLETE);
             }
 
             // check wall collision
