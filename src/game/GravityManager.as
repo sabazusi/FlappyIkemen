@@ -19,7 +19,7 @@ package game
             _velocity -= G_FORCE * 3;
         }
 
-        public function getNextPos(currentPos:Number):Number
+        public function getNextPos():Number
         {
             var newPos:Number = _position + (G_FORCE + _velocity) / 2;
             _velocity += G_FORCE;

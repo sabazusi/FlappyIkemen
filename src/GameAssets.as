@@ -1,6 +1,3 @@
-/*
- * @Auther sabazusi
- */
 package
 {
     public class GameAssets

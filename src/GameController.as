@@ -1,6 +1,3 @@
-/*
- * @Auther sabazusi
- */
 package
 {
     import events.ScreenInitializeEvent;
@@ -41,9 +38,9 @@ package
 
         private function _onLoadAssetsProgress(ratio:Number):void
         {
-            // completed load assets.
             if (ratio == 1.0)
             {
+                // completed load assets.
                 _sceenInitializer.initialize(_assetManager);
             }
         }

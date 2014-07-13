@@ -1,6 +1,3 @@
-/*
- * @Auther sabazusi
- */
 package screen
 {
     import feathers.controls.Screen;
@@ -28,10 +25,8 @@ package screen
         private var _backGroundFront:Image;
         private var _backGroundBack:Image;
 
-        private var _deviceWidth:Number;
-
         private var _ikemen:Image;
-        private var _underPositionLimit:Number;
+        private var _crashGroundYPos:Number;
 
         private var _gravityManager:GravityManager;
 
@@ -48,39 +43,40 @@ package screen
 
         override protected function initialize():void
         {
-            trace("initialized game");
+            // initialize background images.
             _backGroundFront = new Image(assets.getTexture("MAP"));
             _backGroundBack = new Image(assets.getTexture("MAP"));
-            _deviceWidth = this.stage.width;
+            _backGroundFront.x = 0;
+            _backGroundBack.x = _backGroundFront.width;
+            this.addChildAt(_backGroundFront, 0);
+            this.addChildAt(_backGroundBack, 0);
 
+            // initialize walls to avoid.
             var wallTex:Texture = assets.getTexture("WALL");
-            _wallController = new WallController(this, wallTex, GROUND_HEIGHT);
+            _wallController = new WallController(this, wallTex, _originalHeight - GROUND_HEIGHT);
             _wallController.initialize();
 
+            // initialize controllable ikemen.
             var ikemenTex:Texture = assets.getTexture("IKEMEN")
             _ikemen = new Image(ikemenTex);
             _ikemen.scaleX = _ikemen.scaleY = 0.3;
             _ikemen.x = 40;
             _ikemen.y = 50;
-            _backGroundFront.x = 0;
-            _backGroundBack.x = _backGroundFront.width;
-            _underPositionLimit =_backGroundFront.height - GROUND_HEIGHT - _ikemen.height;
+            this.addChild(_ikemen);
+
+            _crashGroundYPos =_originalHeight - GROUND_HEIGHT - _ikemen.height;
 
             _gravityManager = new GravityManager(_ikemen.y);
 
-            this.addChildAt(_backGroundFront, 0);
-            this.addChildAt(_backGroundBack, 0);
-            this.addChild(_ikemen);
-            this.addEventListener(starling.events.Event.ENTER_FRAME, _onEnterFrame);
             this.addEventListener(TouchEvent.TOUCH,  _onTouch);
             _wallController.addEventListener(flash.events.Event.CLOSE, _onCollision);
 
             _gameEnabled = true;
+            this.addEventListener(starling.events.Event.ENTER_FRAME, _onEnterFrame);
         }
 
         override protected function draw():void
         {
-            trace("draw game");
         }
 
         public function get assets():AssetManager
@@ -95,41 +91,46 @@ package screen
 
         private function _onEnterFrame(event:starling.events.Event):void
         {
-            if (!_gameEnabled) return;
-            // scroll background.
-            this.x -= 2;
-            var pos:Number = this.x * -1;
-            if (pos > stage.width)
+            if (_gameEnabled)
             {
-                this.x = 0;
-            }
-            _ikemen.x = this.x * -1 + 40;
+                // scroll background.
+                this.x -= 2;
+                if (this.x * -1 > stage.width)
+                {
+                    this.x = 0;
+                }
+                _ikemen.x = this.x * -1 + 40;
 
-            if (_isTouching)
-            {
-                _gravityManager.hop();
-            }
-            if(_maintainCount > 0)
-            {
-                _ikemen.visible = (_maintainCount % 10 == 0) ?
-                                    false : true;
-                _maintainCount--;
-            }
-            else
-            {
-                _ikemen.visible = true;
-                _ikemen.y = _gravityManager.getNextPos(_ikemen.y);
-            }
+                // hop with touching.
+                if (_isTouching)
+                {
+                    _gravityManager.hop();
+                }
 
-            if (_ikemen.y > _underPositionLimit)
-            {
-                _gameEnabled = false;
-                dispatchEventWith(flash.events.Event.COMPLETE);
-            }
+                if(_maintainCount > 0)
+                {
+                    _ikemen.visible = (_maintainCount % 10) != 0;
+                    _maintainCount--;
+                }
+                else
+                {
+                    _ikemen.visible = true;
+                    // update ikemen position.
+                    _ikemen.y = _gravityManager.getNextPos();
+                }
 
-            // check wall collision
-            _wallController.updateByCurrentCharacterStatus(_ikemen);
+                // check collision by ground.
+                if (_ikemen.y > _crashGroundYPos)
+                {
+                    _gameEnabled = false;
+                    dispatchEventWith(flash.events.Event.COMPLETE);
+                }
+
+                // check collision by walls..
+                _wallController.updateByCurrentCharacterStatus(_ikemen);
+            }
         }
+
         private function _onCollision(event:flash.events.Event):void
         {
             _gameEnabled = false;

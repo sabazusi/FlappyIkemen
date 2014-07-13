@@ -1,15 +1,7 @@
-/*
- * @Auther sabazusi
- */
 package screen
 {
     import feathers.controls.Button;
     import feathers.controls.Screen;
-    import feathers.display.Scale9Image;
-    import feathers.textures.Scale9Textures;
-
-    import flash.geom.Rectangle;
-
 
     import starling.animation.Transitions;
 
@@ -19,6 +11,7 @@ package screen
     import starling.events.Event;
     import starling.textures.Texture;
     import starling.utils.AssetManager;
+
     public class WelcomeScreen extends Screen
     {
         private var _asset:AssetManager;
@@ -29,39 +22,39 @@ package screen
 
         override protected function initialize():void
         {
-            trace("initialized");
-            var upTexture:Texture = assets.getTexture("BT_UP");
-            var downTexture:Texture = assets.getTexture("BT_DOWN");
-            var scale9Image:Scale9Image = new Scale9Image(new Scale9Textures(upTexture, new Rectangle(0,0,160,40)));
-            var scale9Imaged:Scale9Image = new Scale9Image(new Scale9Textures(downTexture, new Rectangle(0,0,160,40)));
+            var buttonDefaultTexture:Texture = assets.getTexture("BT_UP");
+            var buttonDownTexture:Texture = assets.getTexture("BT_DOWN");
+            var buttonDefaultImage:Image = new Image(buttonDefaultTexture);
+            var buttonDownImage:Image = new Image(buttonDownTexture);
 
             var button:Button = new Button();
             button.width = 160;
             button.height = 40;
-            button.defaultSkin = scale9Image;
-            button.downSkin = scale9Imaged;
+            button.defaultSkin = buttonDefaultImage;
+            button.downSkin = buttonDownImage;
             button.x = (_originalWidth - button.width) / 2;
             button.y = _originalHeight - button.height - 50;
-
-            button.addEventListener(Event.TRIGGERED, function(event:Event):void
-            {
-                dispatchEventWith(Event.COMPLETE);
-            })
+            button.addEventListener(Event.TRIGGERED, _onStartButtonTriggered)
             this.addChild(button);
 
-            var img:Image = new Image(assets.getTexture("IKEMEN"));
-            img.x = img.width * -1 - 100;
-            this.addChild(img);
+            // moving ikemen.
+            var ikemenImage:Image = new Image(assets.getTexture("IKEMEN"));
+            ikemenImage.x = ikemenImage.width * -1 - 100;
+            this.addChild(ikemenImage);
 
-            Starling.juggler.tween(img, 0.5, {
+            Starling.juggler.tween(ikemenImage, 0.5, {
                 transition: Transitions.EASE_OUT_BOUNCE,
-                x: 640-img.width
+                x: _originalWidth - ikemenImage.width
             })
         }
 
         override protected function draw():void
         {
-            trace("draw");
+        }
+
+        private function _onStartButtonTriggered(event:Event):void
+        {
+            dispatchEventWith(Event.COMPLETE);
         }
 
         public function get assets():AssetManager

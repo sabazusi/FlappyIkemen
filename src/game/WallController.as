@@ -18,11 +18,11 @@ package game
         private var _splitWallQueue:Vector.<SplitWall> = Vector.<SplitWall>([]);
         private var _flyableSpaceHeight:Number;
 
-        public function WallController(stage:DisplayObjectContainer, wallTex:Texture, groundHeight:Number)
+        public function WallController(stage:DisplayObjectContainer, wallTex:Texture, flyableSpaceHeight:Number)
         {
             _stage = stage;
             _wallTex = wallTex;
-            _flyableSpaceHeight = 360 - groundHeight;
+            _flyableSpaceHeight = flyableSpaceHeight;
         }
 
         public function initialize():void
@@ -133,11 +133,8 @@ internal class SplitWall
     {
         var flyablePoint:Point = _createFlyableHeight();
 
-        trace("飛べる領域：", flyablePoint.x, flyablePoint.y);
         var upScale:Number = flyablePoint.x / _upWall.height;
         var downScale:Number = (_stageHeight - flyablePoint.y) / _downWall.height;
-  //      trace("縦に伸ばす", upScale);
-    //    trace("横に伸ばす", downScale);
 
 
         _upWall.scaleY = upScale;
@@ -151,7 +148,6 @@ internal class SplitWall
         var maxPoint:Number = _stageHeight - (_upWall.height + _flyableSpaceHeight);
         var minPoint:Number = 0 + _upWall.height;
         var startPoint:Number = Math.floor(Math.random()*(maxPoint-minPoint+1))+minPoint;
-        trace(startPoint, "から", startPoint + _flyableSpaceHeight, "まで通れる");
         return new Point(startPoint, startPoint + _flyableSpaceHeight);
     }
 

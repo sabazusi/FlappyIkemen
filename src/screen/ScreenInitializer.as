@@ -1,13 +1,9 @@
-/*
- * @Auther sabazusi
- */
 package screen
 {
     import events.ScreenInitializeEvent;
 
     import feathers.controls.ScreenNavigator;
     import feathers.controls.ScreenNavigatorItem;
-    import feathers.motion.transitions.ScreenSlidingStackTransitionManager;
 
     import flash.events.EventDispatcher;
 
